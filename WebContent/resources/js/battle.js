@@ -62,7 +62,8 @@ function handleMessage() {
 
 function sendConnectRequest() {
 	var disp = $("#displayNameInput").val().toString() || "NPC";
-	var aurl = $("#avatarUrlInput").val().toString() || "defaultImageUrl";
+	var aurl = $("#avatarUrlInput").val().toString() || "https://i.imgur.com/sdOs51i.jpg";
+	handleUserInfo(disp, aurl);
 	var req = {
 			"displayName": disp,
 			"avatarUrl": aurl
@@ -91,6 +92,25 @@ const handlePortraits = (...args) => {
 	}
 }
 
+const handleUserInfo = (name, avatar) => {
+	const infoDiv = document.getElementsByClassName("playerBasicInfo")[0];
+	for (let i = 0; i < infoDiv.children.length; i++){
+		infoDiv.children[i].style.position = "absolute";
+		infoDiv.children[i].style.right = "5000px";
+	}
+	const username = document.createElement("h2");
+	username.textContent = name;
+	const avatarFrame = document.createElement("img");
+	avatarFrame.style.height = "5rem";
+	avatarFrame.style.width = "5rem";
+	avatarFrame.style.marginRight = "10px";
+	avatarFrame.src = avatar;
+	infoDiv.style.display = "flex";
+	infoDiv.style.alignItems = "center";
+	infoDiv.appendChild(avatarFrame);
+	infoDiv.appendChild(username);
+}
+
 function afterLogin(result) {
     $("#playerId").html("");
 	$("#playerId").append(result.id);
@@ -98,6 +118,7 @@ function afterLogin(result) {
 }
 
 function handleInit(msg) {
+	console.log("bitchtits");
 	console.log(msg);
 	
 	// HOOO OOOOOOO OOOO BOYYY 
