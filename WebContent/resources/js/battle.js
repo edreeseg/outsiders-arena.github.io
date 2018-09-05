@@ -73,25 +73,28 @@ function sendConnectRequest() {
 	});
 }
 
-const handlePortraits = (...args) => {
-	const frames = document.getElementsByClassName("ally");
+const handlePortraits = (allies, enemies) => {
+	const allyFrames = document.getElementsByClassName("ally");
+	const enemyFrames = document.getElementsByClassName("enemy");
 	const backgrounds = new Map([
-	//[0, "https://i.imgur.com/qh2cjpd.jpg"], 
-	[0, "https://static.comicvine.com/uploads/square_medium/11117/111173561/6282665-7538243834-My-He.jpg"],
-	//[1, "https://i.imgur.com/yvQeY2q.png"],
-	[1, "https://i.imgur.com/IdIKKfr.png"],
-	//[2, "https://i.imgur.com/YCBrPWg.png"],
-	[2, "https://i.imgur.com/48UQCaM.jpg"],
+	[0, "https://i.imgur.com/qh2cjpd.jpg"], 
+	[1, "https://i.imgur.com/yvQeY2q.png"],
+	[2, "https://i.imgur.com/YCBrPWg.png"],
 	[3, "https://i.imgur.com/uPWgaVl.jpg"],
 	[4, "https://i.imgur.com/y2pJyrY.jpg"]
 	]);
-	for (let i = 0; i < frames.length; i++){
-		const portrait = document.createElement("img");
-		portrait.setAttribute("src", backgrounds.get(args[i]));
-		portrait.style.maxHeight = "100%";
-		portrait.style.maxWidth = "100%";
-		frames[i].removeChild(frames[i].childNodes[1]);
-		frames[i].appendChild(portrait);
+	for (let i = 0; i < allyFrames.length; i++){
+		const allyPortrait = document.createElement("img");
+		const enemyPortrait = document.createElement("img");
+		allyPortrait.setAttribute("src", backgrounds.get(allies[i].characterId));
+		allyPortrait.style.maxHeight = "100%";
+		allyPortrait.style.maxWidth = "100%";
+		allyFrames[i].removeChild(allyFrames[i].childNodes[1]);
+		enemyPortrait.setAttribute("src", backgrounds.get(enemies[i].characterId));
+		enemyPortrait.style.maxHeight = "100%";
+		enemyPortrait.style.maxWidth = "100%";
+		allyFrames[i].appendChild(allyPortrait);
+		enemyFrames[i].appendChild(enemyPortrait);
 	}
 }
 
@@ -114,6 +117,55 @@ const handleUserInfo = (name, avatar) => {
 	infoDiv.appendChild(username);
 }
 
+const handleEnergy = (energy) => {
+	const battleLogin = document.getElementsByClassName("playerBattleInfo")[0];
+	const strengthDiv = document.createElement("div");
+	const dexterityDiv = document.createElement("div");
+	const arcanaDiv = document.createElement("div");
+	const divinityDiv = document.createElement("div");
+	strengthDiv.id = "strength";
+	dexterityDiv.id = "dexterity";
+	arcanaDiv.id = "arcana";
+	divinityDiv.id = "divinity";
+	const energyTotal = {
+		STRENGTH: 0,
+		DEXTERITY: 0,
+		ARCANA: 0,
+		DIVINITY: 0
+	};
+	for (let i = 0; i < battleLogin.children.length; i++){
+		battleLogin.children[i].style.position = "absolute";
+		battleLogin.children[i].style.right = "5000px";
+	}
+	battleLogin.style.flexDirection = "column";
+	battleLogin.appendChild(strengthDiv);
+	battleLogin.appendChild(dexterityDiv);
+	battleLogin.appendChild(arcanaDiv);
+	battleLogin.appendChild(divinityDiv);
+	for (let entry of energy){
+		energyTotal[entry]++;
+	}
+	for (let key in energyTotal){
+		const energyName = document.createElement("span");
+		energyName.textContent = `${key}:`;
+		energyName.style.marginRight = "10px";
+		document.getElementById(key.toLowerCase()).appendChild(energyName);
+		for (let i = 0; i < energyTotal[key]; i++){
+			const energyBubble = document.createElement("div");
+			energyBubble.style.height = "10px";
+			energyBubble.style.width = "10px";
+			energyBubble.style.borderRadius = "10px";
+			energyBubble.style.border = "1px solid black";
+			energyBubble.style.marginRight = "5px";
+			if (key === "STRENGTH") energyBubble.style.backgroundColor = "red";
+			else if (key === "DEXTERITY") energyBubble.style.backgroundColor = "green";
+			else if (key === "ARCANA") energyBubble.style.backgroundColor = "blue";
+			else if (key === "DIVINITY") energyBubble.style.backgroundColor = "yellow";
+			document.getElementById(key.toLowerCase()).appendChild(energyBubble);
+		}
+	}
+}
+
 function afterLogin(result) {
     $("#playerId").html("");
 	$("#playerId").append(result.id);
@@ -121,9 +173,14 @@ function afterLogin(result) {
 }
 
 function handleInit(msg) {
-	console.log("bitchtits");
 	console.log(msg);
-	
+	if (msg.battle.playerIdOne === Number(document.getElementById("playerId").innerHTML)){
+		handlePortraits(msg.battle.playerOneTeam, msg.battle.playerTwoTeam);
+		handleEnergy(msg.battle.playerOneEnergy);
+	} else {
+		handlePortraits(msg.battle.playerTwoTeam, msg.battle.playerOneTeam);
+		handleEnergy(msg.battle.playerTwoEnergy);
+	}
 	// HOOO OOOOOOO OOOO BOYYY 
 }
 
@@ -166,7 +223,6 @@ function sendMatchMakingMessage() {
 		arenaId: arenaId,
 		opponentName: $("#playerNameMatchMakingInput").val().toString()
 	};
-	handlePortraits(...chars.map(x => Number(x)));
 	console.log(msg);
 	ws.send(JSON.stringify(msg));
 }

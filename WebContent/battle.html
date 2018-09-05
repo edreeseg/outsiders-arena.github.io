@@ -12,7 +12,6 @@
 </head>
 <body id="bootstrap-override">
 	<div class="resource-manager">
-	
 		<div class="idDiv">
 			<span>
 			Arena ID:
@@ -27,17 +26,25 @@
 		<div class="playerBasicInfo">
 			<input id="displayNameInput" 
 			placeholder="Display Name" 
-			onkeydown="if (event.keyCode === 13) document.getElementById('connectButton').click()" />
+			onkeydown="if (event.keyCode === 13) {
+			document.getElementById('connectButton').click();
+			document.getElementById('playerNameMatchMakingInput').focus();
+			}" />
 			<input id="avatarUrlInput" 
 			placeholder="Avatar URL"
-			onkeydown="if (event.keyCode === 13) document.getElementById('connectButton').click()" />
+			onkeydown="if (event.keyCode === 13) {
+			document.getElementById('connectButton').click();
+			document.getElementById('playerNameMatchMakingInput').focus();
+			}" />
 			<br />
 			<button id="connectButton" onclick="sendConnectRequest()">
 				CREATE PLAYER
 			</button>
 		</div>
-		<div>
-			<input id="playerNameMatchMakingInput" placeholder="enter your opponent's displayName">
+		<div class="playerBattleInfo">
+			<input id="playerNameMatchMakingInput" 
+			placeholder="Opponent's Name"
+			onkeydown="if (event.keyCode === 13) document.getElementById('findBattle').click()" />
 			<button id="findBattle" onclick="findBattle()">
 				FIND BATTLE
 			</button>
