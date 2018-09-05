@@ -122,16 +122,16 @@ const handleEnergy = (energy) => {
 	const strengthDiv = document.createElement("div");
 	const dexterityDiv = document.createElement("div");
 	const arcanaDiv = document.createElement("div");
-	const divineDiv = document.createElement("div");
+	const divinityDiv = document.createElement("div");
 	strengthDiv.id = "strength";
 	dexterityDiv.id = "dexterity";
 	arcanaDiv.id = "arcana";
-	divineDiv.id = "divine";
+	divinityDiv.id = "divinity";
 	const energyTotal = {
 		STRENGTH: 0,
 		DEXTERITY: 0,
 		ARCANA: 0,
-		DIVINE: 0
+		DIVINITY: 0
 	};
 	for (let i = 0; i < battleLogin.children.length; i++){
 		battleLogin.children[i].style.position = "absolute";
@@ -141,14 +141,29 @@ const handleEnergy = (energy) => {
 	battleLogin.appendChild(strengthDiv);
 	battleLogin.appendChild(dexterityDiv);
 	battleLogin.appendChild(arcanaDiv);
-	battleLogin.appendChild(divineDiv);
+	battleLogin.appendChild(divinityDiv);
 	for (let entry of energy){
 		energyTotal[entry]++;
 	}
 	for (let key in energyTotal){
-		document.getElementById(key.toLowerCase()).textContent = `${key}: ${energyTotal[key]}`;
+		const energyName = document.createElement("span");
+		energyName.textContent = `${key}:`;
+		energyName.style.marginRight = "10px";
+		document.getElementById(key.toLowerCase()).appendChild(energyName);
+		for (let i = 0; i < energyTotal[key]; i++){
+			const energyBubble = document.createElement("div");
+			energyBubble.style.height = "10px";
+			energyBubble.style.width = "10px";
+			energyBubble.style.borderRadius = "10px";
+			energyBubble.style.border = "1px solid black";
+			energyBubble.style.marginRight = "5px";
+			if (key === "STRENGTH") energyBubble.style.backgroundColor = "red";
+			else if (key === "DEXTERITY") energyBubble.style.backgroundColor = "green";
+			else if (key === "ARCANA") energyBubble.style.backgroundColor = "blue";
+			else if (key === "DIVINITY") energyBubble.style.backgroundColor = "yellow";
+			document.getElementById(key.toLowerCase()).appendChild(energyBubble);
+		}
 	}
-	console.log(energyTotal);
 }
 
 function afterLogin(result) {

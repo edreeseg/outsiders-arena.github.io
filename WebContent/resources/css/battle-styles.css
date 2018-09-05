@@ -30,7 +30,11 @@ body {
 }
 .playerBattleInfo {
 	display: flex;
-	justify-content: space-around;
+}
+.playerBattleInfo > div {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
 }
 .ally-team {
     display: flex;
@@ -97,6 +101,7 @@ body {
     border: 2px solid black;
     background-color: green;
 	color: #eee;
+	user-select: none;
 }
 .healthbar p {
 	height: 50%;

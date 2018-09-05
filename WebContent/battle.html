@@ -12,7 +12,6 @@
 </head>
 <body id="bootstrap-override">
 	<div class="resource-manager">
-	
 		<div class="idDiv">
 			<span>
 			Arena ID:
@@ -44,8 +43,8 @@
 		</div>
 		<div class="playerBattleInfo">
 			<input id="playerNameMatchMakingInput" 
-			placeholder="enter your opponent's displayName"
-			onkeydown="if (event.keyCode === 13) document.getElementById('findBattle').click()">
+			placeholder="Opponent's Name"
+			onkeydown="if (event.keyCode === 13) document.getElementById('findBattle').click()" />
 			<button id="findBattle" onclick="findBattle()">
 				FIND BATTLE
 			</button>
