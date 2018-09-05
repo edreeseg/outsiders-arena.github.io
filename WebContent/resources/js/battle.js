@@ -76,9 +76,12 @@ function sendConnectRequest() {
 const handlePortraits = (...args) => {
 	const frames = document.getElementsByClassName("ally");
 	const backgrounds = new Map([
-	[0, "https://i.imgur.com/qh2cjpd.jpg"], 
-	[1, "https://i.imgur.com/yvQeY2q.png"],
-	[2, "https://i.imgur.com/YCBrPWg.png"],
+	//[0, "https://i.imgur.com/qh2cjpd.jpg"], 
+	[0, "https://static.comicvine.com/uploads/square_medium/11117/111173561/6282665-7538243834-My-He.jpg"],
+	//[1, "https://i.imgur.com/yvQeY2q.png"],
+	[1, "https://i.imgur.com/IdIKKfr.png"],
+	//[2, "https://i.imgur.com/YCBrPWg.png"],
+	[2, "https://i.imgur.com/48UQCaM.jpg"],
 	[3, "https://i.imgur.com/uPWgaVl.jpg"],
 	[4, "https://i.imgur.com/y2pJyrY.jpg"]
 	]);
