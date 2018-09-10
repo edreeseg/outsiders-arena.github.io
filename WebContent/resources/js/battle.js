@@ -2,7 +2,8 @@
 const PROD_URL = "";
 const STAGE_URL = "66.242.90.163:8171";
 const DEV_URL = "localhost:8817";
-const URL = STAGE_URL;
+const DEV_ROREN_URL = "localhost:8171";
+const URL = DEV_ROREN_URL;
 
 var ws = null;
 
@@ -76,6 +77,7 @@ function sendConnectRequest() {
 const handlePortraits = (allies, enemies) => {
 	const allyFrames = document.getElementsByClassName("ally");
 	const enemyFrames = document.getElementsByClassName("enemy");
+	const charIds = [];
 	const backgrounds = new Map([
 	[0, "https://i.imgur.com/qh2cjpd.jpg"], 
 	[1, "https://i.imgur.com/yvQeY2q.png"],
@@ -95,6 +97,33 @@ const handlePortraits = (allies, enemies) => {
 		enemyPortrait.style.maxWidth = "100%";
 		allyFrames[i].appendChild(allyPortrait);
 		enemyFrames[i].appendChild(enemyPortrait);
+		charIds.push(allies[i].characterId);
+	}
+	handleAbilities(...charIds);
+}
+
+const handleAbilities = (...allies) => {
+	console.log(allies);
+	const abilityFrames = document.getElementsByClassName("ally-ability");
+	const abilityImages = new Map([
+		[0, ["./resources/img/alex-ability-1.png", "./resources/img/alex-ability-2.png", 
+			"./resources/img/alex-ability-3.png", "./resources/img/alex-ability-4.png"]],
+		[1, ["./resources/img/fainne-ability-1.png", "./resources/img/fainne-ability-2.png", 
+		"./resources/img/fainne-ability-3.png", "./resources/img/fainne-ability-4.png"]],
+		[2, ["./resources/img/geddy-ability-1.png", "./resources/img/geddy-ability-2.png", 
+		"./resources/img/geddy-ability-3.png", "./resources/img/geddy-ability-4.png"]],
+		[3, ["./resources/img/holly-ability-1.png", "./resources/img/holly-ability-2.png", 
+		"./resources/img/holly-ability-3.png", "./resources/img/holly-ability-4.png"]],
+		[4, ["./resources/img/shinzo-ability-1.png", "./resources/img/shinzo-ability-2.png", 
+		"./resources/img/shinzo-ability-3.png", "./resources/img/shinzo-ability-4.png"]]	
+	]);
+	const abilityArray = [...abilityImages.get(allies[0]), ...abilityImages.get(allies[1]), ...abilityImages.get(allies[2])];
+	for (let i = 0; i < abilityFrames.length; i++){
+		const ability = document.createElement("img");
+		ability.src = abilityArray[i];
+		ability.style.width = "100%";
+		ability.style.height = "100%";
+		abilityFrames[i].appendChild(ability);
 	}
 }
 
