@@ -103,7 +103,6 @@ const handlePortraits = (allies, enemies) => {
 }
 
 const handleAbilities = (...allies) => {
-	console.log(allies);
 	const abilityFrames = document.getElementsByClassName("ally-ability");
 	const abilityImages = new Map([
 		[0, ["./resources/img/alex-ability-1.png", "./resources/img/alex-ability-2.png", 
@@ -188,7 +187,7 @@ const handleEnergy = (energy) => {
 			energyBubble.style.marginRight = "5px";
 			if (key === "STRENGTH") energyBubble.style.backgroundColor = "red";
 			else if (key === "DEXTERITY") energyBubble.style.backgroundColor = "green";
-			else if (key === "ARCANA") energyBubble.style.backgroundColor = "blue";
+			else if (key === "ARCANA") energyBubble.style.backgroundColor = "dodgerblue";
 			else if (key === "DIVINITY") energyBubble.style.backgroundColor = "yellow";
 			document.getElementById(key.toLowerCase()).appendChild(energyBubble);
 		}
@@ -203,10 +202,28 @@ function afterLogin(result) {
 
 function handleInit(msg) {
 	console.log(msg);
+	const allies = [];
 	if (msg.battle.playerIdOne === Number(document.getElementById("playerId").innerHTML)){
+		for (let instance of msg.battle.playerOneTeam){
+			for (let char of msg['characters ']){
+				if (instance.characterId === char.id){
+					allies.push(char);
+					break;
+				}
+			} if (allies.length === 3) break;
+		} 
 		handlePortraits(msg.battle.playerOneTeam, msg.battle.playerTwoTeam);
 		handleEnergy(msg.battle.playerOneEnergy);
 	} else {
+		for (let instance of msg.battle.playerTwoTeam){
+			for (let char of msg['characters ']){
+				if (instance.characterId === char.id){
+					console.log(instance);
+					allies.push(char);
+					break;
+				}
+			} if (allies.length === 3) break;
+		}
 		handlePortraits(msg.battle.playerTwoTeam, msg.battle.playerOneTeam);
 		handleEnergy(msg.battle.playerTwoEnergy);
 	}
